@@ -12,6 +12,17 @@ $(document).ready(function() {
     .done(function(response) {
       $('#loader').hide();
       form.fadeIn();
+      // add recent_tweets function call?
     });
   });
 });
+
+var recent_tweets = function(){
+  $.ajax({
+      method: 'get',
+      url: '/recent_tweets'
+    })
+    .done(function(response) {
+      console.log(response);
+    });
+};

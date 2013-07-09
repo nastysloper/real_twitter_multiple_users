@@ -1,6 +1,9 @@
 require 'twitter'
 
 get '/' do
+  if current_user
+    @recent_tweets = twitter_client(current_user.oauth_token, current_user.oauth_secret).home_timeline
+  end
   erb :index
 end
 
@@ -24,18 +27,18 @@ get '/auth' do
   user.update_attributes!(username: @access_token.params[:screen_name],oauth_token: @access_token.token, oauth_secret: @access_token.secret)
   session[:user] = user.id
   erb :index
-
 end
 
 post '/tweet' do
-  user = User.find(current_user.id)
-  client = config(user.oauth_token, user.oauth_secret)
+  user = User.find(session[:user])
+  client = twitter_client(user.oauth_token, user.oauth_secret)
   client.update(params[:tweet])
+  
   200
 end
 
 
-def config(token, secret)
+def twitter_client(token, secret)
   Twitter::Client.new(
     :oauth_token => token,
     :oauth_token_secret => secret

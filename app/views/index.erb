@@ -9,10 +9,12 @@
   %>
   <% if @access_token || current_user %>
     <div>
+      <% if @access_token %>
       <p>
         <strong>token:</strong> <%= @access_token.token %><br>
         <strong>secret:</strong> <%= @access_token.secret %><br>
       </p>
+      <% end %>
       <p>
         <div id='loader' style='display: none;'>
           <p>Sending Tweet</p>
@@ -31,4 +33,14 @@
     <button><a href="/sign_in">Sign In with Twitter</a></button>
   <% end %>
 
+</div>
+<div>
+  <% list = Array(@recent_tweets).map { |tweet| tweet.text } %>
+  <ul>
+    <% list.each do |tweet| %>
+    <li>
+      <%= tweet %>
+    </li>
+    <% end %>
+  </ul>
 </div>
